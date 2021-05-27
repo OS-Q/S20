@@ -1,11 +1,6 @@
-Sources/.vs/DfuSe/v16/Browse.VC.opendb
-Sources/.vs/DfuSe/v16/Solution.VC.db-shm
-Sources/.vs/DfuSe/v16/Solution.VC.db-wal
-Sources/Binary/
-Sources/DfuFileMgr/Debug/
-Sources/DfuSeCommand/Debug/
-Sources/DfuseDemo/Debug/
-Sources/STDFU/Debug/
-Sources/STDFUFiles/Debug/
-Sources/STDFUPRT/Debug/
-Sources/STTubeDevice/Debug/
+Release
+Debug
+.vs
+.vscode
+ReadMe
+*.txt
