@@ -15,35 +15,43 @@
 *.ilk
 *.map
 *.exp
-
+*.txt
 # Precompiled Headers
 *.gch
 *.pch
 
 # Libraries
+*.lib
 *.a
 *.la
 *.lo
 
 # Shared objects (inc. Windows DLLs)
-#*.dll
+*.dll
 *.so
 *.so.*
 *.dylib
 
 # Executables
-#*.exe
+*.exe
 *.out
 *.app
 *.i*86
 *.x86_64
+*.hex
+*.eep
+*.vs
+bin/
+obj/
 
 # Debug files
 *.dSYM/
 *.su
 *.idb
 *.pdb
-
+*.jpg
+*.cache
+*.plg
 # Kernel Module Compile Results
 *.mod*
 *.cmd
@@ -52,5 +60,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+.vs
 .vscode
-.vs/
+build
+Binary
