@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DfuFileMgr", "DfuFileMgr\DfuFileMgr.vcxproj", "{90BBC4A3-DD3D-447F-82AD-5987EFEEB321}"
 EndProject
@@ -87,7 +87,7 @@ Global
 		{808B30E1-2459-4B4B-AFEB-62B9F159F975}.Debug|x64.ActiveCfg = Debug|Win32
 		{808B30E1-2459-4B4B-AFEB-62B9F159F975}.Release|Win32.ActiveCfg = Release|Win32
 		{808B30E1-2459-4B4B-AFEB-62B9F159F975}.Release|Win32.Build.0 = Release|Win32
-		{808B30E1-2459-4B4B-AFEB-62B9F159F975}.Release|x64.ActiveCfg = Release|Win32
+		{808B30E1-2459-4B4B-AFEB-62B9F159F975}.Release|x64.ActiveCfg = Release|x64
 		{808B30E1-2459-4B4B-AFEB-62B9F159F975}.Template|Win32.ActiveCfg = Release|Win32
 		{808B30E1-2459-4B4B-AFEB-62B9F159F975}.Template|Win32.Build.0 = Release|Win32
 		{808B30E1-2459-4B4B-AFEB-62B9F159F975}.Template|x64.ActiveCfg = Release|Win32
@@ -96,12 +96,15 @@ Global
 		{1976CD02-0152-4CCE-806C-38362E057481}.Debug|x64.ActiveCfg = Debug|Win32
 		{1976CD02-0152-4CCE-806C-38362E057481}.Release|Win32.ActiveCfg = Release|Win32
 		{1976CD02-0152-4CCE-806C-38362E057481}.Release|Win32.Build.0 = Release|Win32
-		{1976CD02-0152-4CCE-806C-38362E057481}.Release|x64.ActiveCfg = Release|Win32
+		{1976CD02-0152-4CCE-806C-38362E057481}.Release|x64.ActiveCfg = Release|x64
 		{1976CD02-0152-4CCE-806C-38362E057481}.Template|Win32.ActiveCfg = Release|Win32
 		{1976CD02-0152-4CCE-806C-38362E057481}.Template|Win32.Build.0 = Release|Win32
 		{1976CD02-0152-4CCE-806C-38362E057481}.Template|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4CD2D1C-8D90-49B2-A562-3D11E38B9E18}
 	EndGlobalSection
 EndGlobal
