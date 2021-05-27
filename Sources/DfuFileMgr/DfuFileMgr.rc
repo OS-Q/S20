@@ -13,11 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// ∑«Ãÿ∂®”Ô—‘ resources
+// Neutral resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-#pragma code_page(936)
+#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -61,12 +61,12 @@ BEGIN
     0x796c, 0x0d3e
 END
 
-#endif    // ∑«Ãÿ∂®”Ô—‘ resources
+#endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// ”¢”Ô(√¿π˙) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -80,7 +80,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 IDD_DfuFileMgrGenerate_DIALOG DIALOGEX 0, 0, 357, 137
 STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_MINIMIZEBOX | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CLIENTEDGE | WS_EX_CONTROLPARENT | WS_EX_APPWINDOW
-CAPTION "DFU File Manager (v3.0.5) - Generation"
+CAPTION "DFU File Manager (v3.0.6) - Generation"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     EDITTEXT        IDC_EDITVID,63,28,35,14,ES_AUTOHSCROLL
@@ -88,7 +88,7 @@ BEGIN
     EDITTEXT        IDC_EDITVERSION,63,68,35,14,ES_AUTOHSCROLL
     LISTBOX         IDC_LISTFILES,117,13,231,32,LBS_USETABSTOPS | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
     EDITTEXT        IDC_EDITALTSET,181,56,29,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "&Hex or S19...",IDC_BUTTONADDS19HEX,221,56,58,14
+    PUSHBUTTON      "&S19 or Hex...",IDC_BUTTONADDS19HEX,221,56,58,14
     PUSHBUTTON      "&Multi BIN...",IDC_BUTTONADDBIN,281,56,61,14
     PUSHBUTTON      "&Delete selected Image",IDC_BUTTONDELETEIMAGE,242,98,102,14
     DEFPUSHBUTTON   "&Generate...",IDC_BUTTONGENERATE,245,120,50,14
@@ -108,7 +108,7 @@ END
 IDD_DfuFileMgrExtract_DIALOG DIALOGEX 0, 0, 347, 116
 STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_MINIMIZEBOX | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CLIENTEDGE | WS_EX_CONTROLPARENT
-CAPTION "DFU File Manager (v3.0.5) - Extract"
+CAPTION "DFU File Manager (v3.0.6) - Extract"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     EDITTEXT        IDC_EDITVID,58,26,32,14,ES_AUTOHSCROLL | WS_DISABLED
@@ -133,7 +133,7 @@ END
 IDD_DfuFileMgrMultiBin_DIALOG DIALOGEX 0, 0, 247, 116
 STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_MINIMIZEBOX | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CLIENTEDGE | WS_EX_CONTROLPARENT
-CAPTION "Multi Bin injection...(v3.0.5)"
+CAPTION "Multi Bin injection...(v3.0.6)"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "&OK",IDOK,138,100,50,14
@@ -148,18 +148,18 @@ BEGIN
     EDITTEXT        IDC_EDITSTARTADDR,43,25,57,14,ES_AUTOHSCROLL
 END
 
-IDD_DfuFileMgrWhatToDo_DIALOG DIALOGEX 0, 0, 259, 81
+IDD_DfuFileMgrWhatToDo_DIALOG DIALOGEX 0, 0, 223, 62
 STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_MINIMIZEBOX | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CLIENTEDGE | WS_EX_CONTROLPARENT
-CAPTION "DFU File Manager - HavenXie(v3.0.5)"
+CAPTION "DFU File Manager - Want to do (v3.0.6)"
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "&OK",IDOK,194,60,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,171,45,50,14
     CONTROL         "I want to GENERATE a DFU file from S19, HEX or BIN files",IDC_RADIOCHOICE,
-                    "Button",BS_AUTORADIOBUTTON | WS_GROUP,15,23,220,10
+                    "Button",BS_AUTORADIOBUTTON | WS_GROUP,9,13,203,10
     CONTROL         "I want to EXTRACT S19, HEX or BIN files from a DFU one.",IDC_RADIOCHOICE2,
-                    "Button",BS_AUTORADIOBUTTON,15,41,215,10
-    GROUPBOX        "Choose your action:",IDC_STATIC,7,7,235,52
+                    "Button",BS_AUTORADIOBUTTON,9,26,202,10
+    GROUPBOX        "Choose your action:",IDC_STATIC,2,2,219,41
 END
 
 
@@ -169,8 +169,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,4,0
- PRODUCTVERSION 3,0,4,0
+ FILEVERSION 3,0,6,0
+ PRODUCTVERSION 3,0,6,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -187,12 +187,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "STMicroelectronics"
             VALUE "FileDescription", "DFU File Manager"
-            VALUE "FileVersion", "3, 0, 4, 0"
+            VALUE "FileVersion", "3.0.6.0"
             VALUE "InternalName", "DFUFileMgr"
-            VALUE "LegalCopyright", "Copyright © 2014"
+            VALUE "LegalCopyright", "Copyright © 2018"
             VALUE "OriginalFilename", "DFUFileMgr.exe"
             VALUE "ProductName", "DFUFileMgr Application"
-            VALUE "ProductVersion", "3, 0, 4, 0"
+            VALUE "ProductVersion", "3.0.6.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -237,9 +237,9 @@ BEGIN
     IDD_DfuFileMgrWhatToDo_DIALOG, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 252
+        RIGHTMARGIN, 216
         TOPMARGIN, 7
-        BOTTOMMARGIN, 74
+        BOTTOMMARGIN, 55
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -253,39 +253,12 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "DFU File Manager.ico"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// AFX_DIALOG_LAYOUT
-//
-
-IDD_DfuFileMgrGenerate_DIALOG AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
-
-IDD_DfuFileMgrMultiBin_DIALOG AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
-
-IDD_DfuFileMgrWhatToDo_DIALOG AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
-
-IDD_DfuFileMgrExtract_DIALOG AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
-
-#endif    // ”¢”Ô(√¿π˙) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// ∑®”Ô(∑®π˙) resources
+// French (France) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
 LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
@@ -328,7 +301,7 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-#endif    // ∑®”Ô(∑®π˙) resources
+#endif    // French (France) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

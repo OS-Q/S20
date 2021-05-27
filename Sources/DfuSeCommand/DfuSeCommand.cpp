@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
 * Company            : STMicroelectronics
 * Author             : MCD Application Team
 * Description        : Device Firmware Upgrade Extension Command Line demo
-* Version            : V1.0.0
-* Date               : 21-November-2011
+* Version            : V1.4.0
+* Date               : 01-June-2018
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,7 +13,7 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 ********************************************************************************
 * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE
-* "MCD-ST Liberty SW License Agreement V2.pdf"
+* "SLA0044.txt"
 *******************************************************************************/
 
 
@@ -30,15 +30,7 @@
 #include <dos.h>
 #include <windows.h>
 //#include <iostream.h>
-//#pragma comment(lib,".\\lib\\STDFU.lib")
-//#pragma comment(lib,".\\lib\\STDFUFiles.lib")
-//#pragma comment(lib,".\\lib\\STDFUPRT.lib")
-//#pragma comment(lib,".\\lib\\STTubeDevice30.lib")
-//
-//#include ".\\lib\\STDFU.H"
-//#include ".\\lib\\STDFUFiles.h"
-//#include ".\\lib\\STDFUPRT.h"
-//#include ".\\lib\\STTubeDevice.h"
+
 
 static GUID	GUID_DFU = { 0x3fe809ab, 0xfb91, 0x4cb5, { 0xa6, 0x43, 0x69, 0x67, 0x0d, 0x52,0x36,0x6e } };
 
@@ -120,7 +112,7 @@ bool FileExist(LPCTSTR filename)
 /*******************************************************************************************/
 void man()
 {
-	printf("STMicroelectronics DfuSe command line v1.0.0 \n\n");
+	printf("STMicroelectronics DfuSe command line v1.4.0 \n\n");
 	printf(" Usage : \n\n");
 	printf(" DfuSeCommand.exe [options] [Agrument][[options] [Agrument]...] \n\n");
     
@@ -137,12 +129,9 @@ void man()
 	printf("     --v               : verify after download \n");
 	printf("     --o               : optimize; removes FFs data \n");
 	printf("     --fn  file_name   : full path name (.dfu file) \n");
+	fflush(NULL);
 
-	printf("  -t                   (Convert hex file to dfu file ) \n");
-	printf("     hexFilePath       : the source file path of *.hex \n");
-	printf("     dfuFilePath       : the target file path of *.dfu \n");
 
-	printf("  eg: .\DfuSeCommand.exe -t test.hex -c --de 0 -d --fn test.dfu \n");
 
 }
 
@@ -160,7 +149,6 @@ bool Is_Option(char* option)
 	else if (strcmp(option,"-c")==0) return true;
 	else if (strcmp(option,"-u")==0) return true;
 	else if (strcmp(option,"-d")==0) return true;
-	else if (strcmp(option, "-t") == 0) return true;
     else return false;
 }
 
@@ -423,13 +411,17 @@ void HandleError(PDFUThreadContext pContext)
 		Tmp.Format("\nTarget %02i: %s", m_CurrentTarget, ErrorCode);
 		//m_Progress.SetWindowText(Tmp);
 		printf(Tmp);
+		fflush(NULL);
 	}
 	else
 	//m_Progress.SetWindowText(ErrorCode);
-	printf("\n" + ErrorCode);
+	{ printf("\n" + ErrorCode);
+	  fflush(NULL);
+	  }
 
 	//AfxMessageBox(CurrentTarget+ErrorCode+Alternate+Operation+TransferSize+LastDFUStatus+CurrentStateMachineTransition+CurrentRequest+StartAddress+EndAddress+CurrentNBlock+CurrentLength+Percent);
     printf(CurrentTarget+ErrorCode+Alternate+Operation+TransferSize+LastDFUStatus+CurrentStateMachineTransition+CurrentRequest+StartAddress+EndAddress+CurrentNBlock+CurrentLength+Percent);
+	fflush(NULL);
 
 
 }
@@ -449,10 +441,12 @@ void HandleTxtError(LPCSTR szTxt)
 	{
 		Tmp.Format("Target %02i: %s", m_CurrentTarget, szTxt);
 		printf(Tmp);
+		fflush(NULL);
 	}
 	else
-		printf(szTxt);
-
+	{	printf(szTxt);
+		fflush(NULL);
+	}
 }
 
 /*******************************************************************************************/
@@ -472,7 +466,8 @@ void HandleTxtSuccess(LPCSTR szTxt)
 	}
 	else
 		printf(szTxt);
-
+		
+    fflush(NULL);
 }
 
 
@@ -524,6 +519,7 @@ int LaunchUpload(void)
 	{
 		return 0;
 	}
+
 }
 
 
@@ -826,7 +822,8 @@ int Refresh(void)
 						if ( (m_CurrDevDFUDesc.bcdDFUVersion<0x011A) || (m_CurrDevDFUDesc.bcdDFUVersion>=0x0120) )
 						{	
 							if ( m_CurrDevDFUDesc.bcdDFUVersion != 0)
-							printf("Bad DFU protocol version. Should be 1.1A");						
+							printf("Bad DFU protocol version. Should be 1.1A");
+							fflush(NULL);							
 						}
 						else
 						{
@@ -840,24 +837,126 @@ int Refresh(void)
 								if (STDFUPRT_CreateMappingFromDevice((LPSTR)(LPCSTR)TmpDev[m_CurrentDevice], &m_pMapping, &m_NbAlternates)==STDFUPRT_NOERROR)
 								{
 								
-								    bSuccess=TRUE;
+								    bSuccess=TRUE;								
 								}
 								else
 								printf("Unable to find or decode device mapping... Bad Firmware");
+								fflush(NULL);
 							}
 						}
 					}
 					else
-						printf("Unable to get DFU descriptor... Bad Firmware");
+						{printf("Unable to get DFU descriptor... Bad Firmware");
+						fflush(NULL); }
 				}
 				else
-					printf("Unable to get descriptors... Bad Firmware");
+					{printf("Unable to get descriptors... Bad Firmware");
+					fflush(NULL);}
+
+
+		    /* Device ID and Unique ID may be added by  user */
+			
+			/*
+			
+			LPBYTE m_pBuffer = (LPBYTE)malloc(64);
+			memset(m_pBuffer, 0x00, 64);
+		
+			{
+				DFUSTATUS DFUStatus;
+
+				STDFU_Getstatus(&hDle, &DFUStatus);
+				while (DFUStatus.bState != STATE_DFU_IDLE)
+				{
+					STDFU_Clrstatus(&hDle);
+					STDFU_Getstatus(&hDle, &DFUStatus);
+				}
+
+				m_pBuffer[0] = 0x21;
+				m_pBuffer[1] = 0x00;
+				m_pBuffer[2] = 0x20;
+				m_pBuffer[3] = 0x04;
+				m_pBuffer[4] = 0xE0;
+
+				STDFU_Dnload(&hDle, m_pBuffer, 0x05, 0);
+
+				STDFU_Getstatus(&hDle, &DFUStatus);
+				while (DFUStatus.bState != STATE_DFU_IDLE)
+				{
+					STDFU_Clrstatus(&hDle);
+					STDFU_Getstatus(&hDle, &DFUStatus);
+				}
+
+				if (STDFU_Upload(&hDle, m_pBuffer, 4, 2) == STDFU_NOERROR)
+				{	
+					printf("Device DID :");
+					fflush(NULL);
+					for (i = 0; i < 4; i++)
+					{
+						printf("0x%02x ", m_pBuffer[i]);
+						fflush(NULL);
+					}
+					printf("\n");
+					fflush(NULL);
+
+				}
+			}
+
+			memset(m_pBuffer, 0x00, 64);
+		
+			{
+				DFUSTATUS DFUStatus;
+
+				STDFU_Getstatus(&hDle, &DFUStatus);
+				while (DFUStatus.bState != STATE_DFU_IDLE)
+				{
+					STDFU_Clrstatus(&hDle);
+					STDFU_Getstatus(&hDle, &DFUStatus);
+				}
+
+				m_pBuffer[0] = 0x21;
+				m_pBuffer[1] = 0x10;
+				m_pBuffer[2] = 0x7A;
+				m_pBuffer[3] = 0xFF;
+				m_pBuffer[4] = 0x1F;
+
+				STDFU_Dnload(&hDle, m_pBuffer, 0x05, 0);
+
+				STDFU_Getstatus(&hDle, &DFUStatus);
+				while (DFUStatus.bState != STATE_DFU_IDLE)
+				{
+					STDFU_Clrstatus(&hDle);
+					STDFU_Getstatus(&hDle, &DFUStatus);
+				}
+
+				if (STDFU_Upload(&hDle, m_pBuffer, 12, 2) == STDFU_NOERROR)
+				{	
+					printf("Device UID :");
+					fflush(NULL);
+					for (i = 0; i < 12; i++)
+					{
+						printf("0x%02x ", m_pBuffer[i]);
+						fflush(NULL);
+					}
+					printf("\n");
+					fflush(NULL);
+
+				}
+			}
+
+			*/
 
             STDFU_Close(&hDle);
 
+
 		printf("%d Device(s) found : \n",devIndex );
+		fflush(NULL);
 		for ( i=0; i< devIndex  ; i++ )
+		{
 		printf("Device [%d]: %s, having [%d] alternate targets \n",devIndex, Prod, m_NbAlternates);
+		fflush(NULL);
+		}
+
+
 		return 0;
 		
 
@@ -868,6 +967,7 @@ int Refresh(void)
 		{
 
 			printf("%d Device(s) found. Plug your DFU Device ! \n",devIndex );
+			fflush(NULL);
 		  return 1 ;  /* No devices */
 
 		}
@@ -901,6 +1001,7 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
         elapsedTime = endTime - startTime;
     
 		printf( " Duration: %.2i:%.2i:%.2i", elapsedTime.GetHours(),elapsedTime.GetMinutes(),elapsedTime.GetSeconds());
+		fflush(NULL);
 
 
 		CString Tmp, Tmp2;
@@ -926,7 +1027,9 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 			m_OperationCode=0;
 			if (Context.ErrorCode==STDFUPRT_UNSUPPORTEDFEATURE)
 				//AfxMessageBox("This feature is not supported by this firmware.");
-				printf("This feature is not supported by this firmware.");
+			{	printf("This feature is not supported by this firmware.");
+				fflush(NULL);
+				}
 			else
 			
 			{ 
@@ -963,6 +1066,7 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 				{
 				  Tmp.Format("\rTarget %02i: Uploading (%i%%)...", m_CurrentTarget, Context.Percent);
 				  printf(Tmp);
+				  fflush(NULL);
 
 				  //printf("%i KB(%i Bytes) of %i KB(%i Bytes) \n", ((STDFUFILES_GetImageSize(Context.hImage)/1024)*Context.Percent)/100,  (STDFUFILES_GetImageSize(Context.hImage)*Context.Percent)/100, STDFUFILES_GetImageSize(Context.hImage)/1024,  STDFUFILES_GetImageSize(Context.hImage));
 	
@@ -977,6 +1081,7 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 				{
 				  Tmp.Format("\rTarget %02i: Upgrading - Download Phase (%i%%)...", m_CurrentTarget, Context.Percent);
 				  printf(Tmp);
+				  fflush(NULL);
 
 	              //printf("%i KB(%i Bytes) of %i KB(%i Bytes) \n", ((STDFUFILES_GetImageSize(Context.hImage)/1024)*Context.Percent)/100,  (STDFUFILES_GetImageSize(Context.hImage)*Context.Percent)/100, STDFUFILES_GetImageSize(Context.hImage)/1024,  STDFUFILES_GetImageSize(Context.hImage));
 	
@@ -988,11 +1093,13 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 			case OPERATION_DETACH:
 				Tmp.Format("\rDetaching (%i%%)...", Context.Percent);
 				 printf(Tmp);
+				 fflush(NULL);
 
 				break;
 			case OPERATION_RETURN:
 				Tmp.Format("\rLeaving DFU mode (%i%%)...", Context.Percent);
 				 printf(Tmp);
+				 fflush(NULL);
 
 				break;
 			default:
@@ -1092,6 +1199,7 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 								if (dwRet==STDFUFILES_NOERROR)
 								{
 									printf("Upload successful !\n");
+									fflush(NULL);
 									//m_CurrentTarget=m_CtrlDevTargets.GetNextItem(m_CurrentTarget, LVIS_SELECTED);
 									/*if (m_CurrentTarget>=0)
 									{
@@ -1103,11 +1211,14 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 									PostQuitMessage (0) ;
 								}
 								else
-									printf("Unable to append image to DFU file...");
+									{ printf("Unable to append image to DFU file...");
+									fflush(NULL); }
 								STDFUFILES_CloseDFUFile(hFile);
 							}
 							else
-								printf("Unable to create a new DFU file...");
+								{ printf("Unable to create a new DFU file...");
+								fflush(NULL);
+								}
 						}
 						else // This was a verify
 						{
@@ -1146,6 +1257,7 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 														HandleTxtError("Verify successful, but data not matching...");
 														Tmp.Format("Matching not good. First Difference at address 0x%08X:\nFile  byte  is  0x%02X.\nRead byte is 0x%02X.", ElementSource.dwAddress+j, ElementSource.Data[j], ElementRead.Data[j]);
 														printf(Tmp);
+														fflush(NULL);
 														break;
 													}
 												}
@@ -1188,7 +1300,8 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 							if (bSuccess)
 							{
 								if (!bDifferent)
-									printf("\nVerify successful !\n");
+									{printf("\nVerify successful !\n");
+									fflush(NULL);}
 								/*m_CurrentTarget=m_CtrlDevTargets.GetNextItem(m_CurrentTarget, LVIS_SELECTED);
 								if (m_CurrentTarget>=0)
 								{
@@ -1206,6 +1319,7 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nIDEvent, DWORD dwTime)
 					if (Context.Operation==OPERATION_UPGRADE)
 					{
 						printf("\nUpgrade successful !\n");
+						fflush(NULL);
 						m_BufferedImage=0;
 
 						
@@ -1367,47 +1481,7 @@ void OnCancel()
 	}
 }
 
-CString Files[MAX_PATH] = {'0'};
 
-UINT8 SearchFilesByWildcard(LPCSTR wildcardPath)
-{
-	HANDLE hFile = INVALID_HANDLE_VALUE;
-	WIN32_FIND_DATA pNextInfo;
-	UINT8 File_cnt = 0;
-
-	hFile = FindFirstFile(wildcardPath, &pNextInfo);
-	if (INVALID_HANDLE_VALUE == hFile)
-	{
-		return 0;
-	}
-
-	WCHAR infPath[MAX_PATH] = { 0 };
-	if (pNextInfo.cFileName[0] != '.')
-	{
-		Files[File_cnt++] = pNextInfo.cFileName;
-		printf("Find result = %s\r\n", pNextInfo.cFileName);
-	}
-
-	while (FindNextFile(hFile, &pNextInfo))
-	{
-		if (pNextInfo.cFileName[0] == '.')
-		{
-			continue;
-		}
-		Files[File_cnt++] = pNextInfo.cFileName;
-		printf("Find result = %s\r\n", pNextInfo.cFileName);
-	}
-	//while (File_cnt--)
-	//{
-	//	printf("%s\r\n", Files[File_cnt].cFileName);
-	//}
-	return File_cnt;
-}
-
-void convert()
-{
-
-}
 
 /*******************************************************************************************/
 /* Function    : main																       */
@@ -1424,7 +1498,7 @@ int main(int argc, char* argv[])
 	{
 		man();
 
-		//getchar();
+
 
 	}
 	else
@@ -1438,6 +1512,7 @@ int main(int argc, char* argv[])
 			   if (arg_index <= (argc - 1)) 
 				  printf("bad parameter [%s] \n", argv[arg_index]);
 
+
 			  printf("\n Press any key to continue ..."); 
 			  getchar(); 
 			  return 1;
@@ -1449,8 +1524,7 @@ int main(int argc, char* argv[])
 				man(); 
 				return 0;
 			}
-			
-			//=============================== connect ===========================================
+			//=============================== connect ============================================
 			else if (strcmp(argv[arg_index],"-c")==0)
 			{
 			   while(arg_index < argc)
@@ -1482,10 +1556,13 @@ int main(int argc, char* argv[])
 				 else 
 				 {
 					 if (arg_index < argc - 1) 
-						printf("bad parameter [%s] \n", argv[arg_index]);
+						{printf("bad parameter [%s] \n", argv[arg_index]);
+						fflush(NULL);
+						}
 						
 					 /* TO DO:  Free device and buffers*/
 					 printf("\n Press any key to continue ..."); 
+					 fflush(NULL);
 				     getchar(); 
 				     return 1;
 				 }
@@ -1493,7 +1570,6 @@ int main(int argc, char* argv[])
 			    // Enumerate the DFU device and Set Buffers
 			   	Refresh();
 			}
-			
 			//============================ UPLOAD ===============================================
 			else if (strcmp(argv[arg_index],"-u")==0)
 			{
@@ -1523,11 +1599,13 @@ int main(int argc, char* argv[])
 					else 
 					 {
 						 if (arg_index <= (argc - 1)) 
-							printf("bad parameter [%s] \n", argv[arg_index]);
+							{ printf("bad parameter [%s] \n", argv[arg_index]);
+							fflush(NULL); }
 
 						 /* TO DO:  Free device and buffers*/
 
 						 printf("\n Press any key to continue ..."); 
+						 fflush(NULL);
 						 getchar(); 
 						 return 1;
 					 }
@@ -1538,6 +1616,7 @@ int main(int argc, char* argv[])
                       if ( m_UpFileName != "")
 					  {
 				          printf( "file %s does not exist .. Creating file\n", m_UpFileName);
+						  fflush(NULL);
 						  FILE* fp = fopen((LPCTSTR)m_UpFileName, "a+");
 						  fclose(fp);
 					  }
@@ -1546,6 +1625,7 @@ int main(int argc, char* argv[])
 					  {
 					  
 					    printf( "file %s does not exist .. \n", m_UpFileName);
+						fflush(NULL);
 					    return 1;
 					  }
 					
@@ -1569,7 +1649,7 @@ int main(int argc, char* argv[])
 
 			}
 			
-			//============================ DOWNLOAD =============================================
+			//============================ DOWNLOAD ==============================================
 			else if (strcmp(argv[arg_index],"-d")==0)
 			{
 				while(arg_index < argc)
@@ -1611,11 +1691,14 @@ int main(int argc, char* argv[])
 				 else 
 				 {
                      if (arg_index <= (argc - 1)) 
-						printf("bad parameter [%s] \n", argv[arg_index]);
+						{ printf("bad parameter [%s] \n", argv[arg_index]);
+						fflush(NULL);
+						}
 
 					 /* TO DO:  Free device and buffers*/
 
 					 printf("\n Press any key to continue ..."); 
+					 fflush(NULL);
 				     getchar(); 
 				     return 1;
 				 }
@@ -1626,10 +1709,12 @@ int main(int argc, char* argv[])
 			  if(!FileExist((LPCTSTR)m_DownFileName))
 			   {
                     printf( "file does not exist %s \n", m_DownFileName);
+					fflush(NULL);
 
 					// TO DO:  Free device and buffers
 
 					 printf("\n Press any key to continue ..."); 
+					 fflush(NULL);
 				     getchar(); 
 				     return 1;
 			   }
@@ -1649,135 +1734,8 @@ int main(int argc, char* argv[])
 			   OnCancel();
 
 			   //return 0;
-			}
+   
 
-			//============================ hex2dfu ==============================================
-
-			else if (strcmp(argv[arg_index], "-t") == 0)
-			{
-				while (arg_index < argc)
-				{
-					if (arg_index < argc - 1)
-						arg_index++;
-					else
-						break;
-
-					if (Is_Option(argv[arg_index]))
-						break;
-
-					else //if (Is_SubOption(argv[arg_index]))
-					{
-						CString Tmp;
-						HANDLE Image;
-						HANDLE hFile;
-						BYTE m_AltSet = 0;
-						CString tFilePath = "";
-						UINT8 File_num = 0;
-						UINT8 i = 0;
-						char Drive[3], Dir[256], Fname[256], Ext[256];
-						_splitpath(((CString)argv[arg_index]), Drive, Dir, Fname, Ext);
-						if (strcmp(Ext, ".hex") == 0)
-						{
-							File_num = SearchFilesByWildcard(argv[arg_index]);
-							while (i < File_num)
-							{
-								if(strcmp(Files[i], Fname) == 0)
-								{
-									File_num = i + 1;
-									break;
-								}
-								i++;
-							}
-							if (i == File_num)
-								i = 0;
-						}
-
-						while (i < File_num)
-						{
-							CString cStr, temp;
-							temp.Format("%s", Drive);
-							cStr += temp;
-							temp.Empty();
-							temp.Format("%s", Dir);
-							cStr += temp;
-							temp.Empty();
-							//cStr.Delete(cStr.GetLength() - 1, 1);//去掉不包含文件名的路径的最后一个\，否则编译器会误会有转义字符						
-							temp.Format("%s", Files[i]);//将路径拼接成想要的文件路径
-							cStr += temp;
-							temp.Empty();
-							//cStr.Replace("\\", "\\\\");
-							cStr.TrimRight();
-							if (STDFUFILES_ImageFromFile((LPSTR)(LPCSTR)cStr, &Image, m_AltSet) == STDFUFILES_NOERROR)
-							{
-								printf("Image for Alternate Setting %02i\r\n", m_AltSet);
-								if (arg_index < argc - 1)
-								{
-									arg_index++;//到达目标文件夹				
-									if (Is_Option(argv[arg_index]) || Is_SubOption(argv[arg_index]))
-									{
-										
-										Tmp = cStr;
-										arg_index--;
-									}								
-									else
-									{
-										if ((((CString)argv[arg_index-1]).Find("*.hex") != -1) && (File_num > 1))
-										{
-											printf("Error. There are multiple source files, but only one destination file.");
-											return -1;
-										}
-										Tmp = ((CString)argv[arg_index]);//获取目标文件名
-									}	
-								}
-								else
-								{
-									Tmp = cStr;
-								}
-
-								if ((Tmp.Find(".dfu") == -1) && (Tmp.Find(".hex") == -1))//文件后缀不对
-								{
-									printf("The file ext is error.\r\n");
-								}
-								tFilePath = Tmp.Left(strlen(Tmp) - 4) + ".dfu";
-
-								if (STDFUFILES_SetImageName(Image, (PSTR)(LPCSTR)tFilePath) == STDFUFILES_NOERROR)
-								{
-									Tmp = " (" + Tmp +") ";
-									printf("Create image from this file" + Tmp + "successful.\r\n");
-								}
-								i++;
-							}
-							else
-							{
-								printf("Unable to create image from this file...");
-								//return 0;
-								i++;
-								continue;
-							}
-							if (STDFUFILES_CreateNewDFUFile((LPSTR)(LPCSTR)tFilePath, &hFile, 0x0483, 0x0000, 0x0000) == STDFUFILES_NOERROR)
-							{
-								if (STDFUFILES_AppendImageToDFUFile(hFile, Image) == STDFUFILES_NOERROR)
-									printf("Success for convert .hex to .dfu.\r\n");
-								else
-									printf("Failure for convert .hex to .dfu.\r\n");
-								STDFUFILES_CloseDFUFile(hFile);
-							}
-						}
-						
-
-						if (argc == 3)//兼容hex2dfu.exe
-						{
-							return 1;
-						}
-						else if (arg_index == argc - 1)
-						{
-							printf("\n Press any key to continue ...");
-							//getchar();
-							return 1;
-						}
-							
-					}
-				}
 			}
 			
 		} // While

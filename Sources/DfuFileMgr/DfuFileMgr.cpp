@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
 * Company            : STMicroelectronics
 * Author             : MCD Application Team
 * Description        : STMicroelectronics Device Firmware Upgrade File Manager
-* Version            : V3.0.5
-* Date               : 09-May-2011
+* Version            : V3.0.6
+* Date               : 01-June-2015
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,7 +13,7 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 ********************************************************************************
 * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE
-* "MCD-ST Liberty SW License Agreement V2.pdf"
+* "SLA0044.txt"
 *******************************************************************************/
 
 // DfuFileMgr.cpp : Defines the class behaviors for the application.
@@ -38,7 +38,6 @@ BEGIN_MESSAGE_MAP(CDfuFileMgrApp, CWinApp)
 	//{{AFX_MSG_MAP(CDfuFileMgrApp)
 	//}}AFX_MSG
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
-	
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -64,10 +63,6 @@ BOOL CDfuFileMgrApp::InitInstance()
 	CDfuFileMgrDlgExtract dlgExtract;
 	CWhatToDoDlg dlgWhat;
 
-
-	//m_pMainWnd = &dlg;
-	//dlg.DoModal();
-
 	if (dlgWhat.DoModal()==IDCANCEL)
 	{
 		m_pMainWnd = &dlg;
@@ -83,5 +78,3 @@ BOOL CDfuFileMgrApp::InitInstance()
 	//  application, rather than start the application's message pump.
 	return FALSE;
 }
-
-

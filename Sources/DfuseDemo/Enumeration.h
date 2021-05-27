@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
 * Company            : STMicroelectronics
 * Author             : MCD Application Team
 * Description        : STMicroelectronics Device Firmware Upgrade Extension Demo
-* Version            : V3.0.3
-* Date               : 21-November-2011
+* Version            : V3.0.6
+* Date               : 01-June-2018
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,7 +13,7 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 ********************************************************************************
 * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE
-* "MCD-ST Liberty SW License Agreement V2.pdf"
+* "SLA0044.txt"
 *******************************************************************************/
 
 #ifndef _ENUMERATION_H_

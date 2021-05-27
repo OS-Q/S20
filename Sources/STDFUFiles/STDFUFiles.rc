@@ -13,13 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -27,8 +25,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,4,0
- PRODUCTVERSION 3,0,4,0
+ FILEVERSION 3,0,6,0
+ PRODUCTVERSION 3,0,6,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -45,12 +43,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "STMicroelectronics"
             VALUE "FileDescription", "STDFUFILES DLL"
-            VALUE "FileVersion", "3, 0, 4, 0"
+            VALUE "FileVersion", "3.0.6.0"
             VALUE "InternalName", "STDFUFILES"
-            VALUE "LegalCopyright", "Copyright © 2014"
+            VALUE "LegalCopyright", "Copyright © 2018"
             VALUE "OriginalFilename", "STDFUFILES.DLL"
             VALUE "ProductName", "Dynamic Link Library STDFUFILES"
-            VALUE "ProductVersion", "3, 0, 4, 0"
+            VALUE "ProductVersion", "3.0.6.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -59,7 +57,7 @@ BEGIN
     END
 END
 
-#endif    // English (U.S.) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -67,10 +65,8 @@ END
 // French (France) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
-#ifdef _WIN32
 LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
 #pragma code_page(1252)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////

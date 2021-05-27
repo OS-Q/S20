@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
 * Company            : STMicroelectronics
 * Author             : MCD Application Team
 * Description        : STMicroelectronics Device Firmware Upgrade File Manager Dlg
-* Version            : V3.0.2
-* Date               : 09-May-2011
+* Version            : V3.0.6
+* Date               : 01-June-2018
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,7 +13,7 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 ********************************************************************************
 * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE
-* "MCD-ST Liberty SW License Agreement V2.pdf"
+* "SLA0044.txt"
 *******************************************************************************/
 
 // DfuFileMgrDlg.cpp : implementation file
@@ -80,6 +80,7 @@ BEGIN_MESSAGE_MAP(CDfuFileMgrDlg, CDialog)
 	//{{AFX_MSG_MAP(CDfuFileMgrDlg)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTONADD, OnButtonadd)
 	ON_BN_CLICKED(IDC_BUTTONGENERATE, OnButtongenerate)
 	ON_WM_CLOSE()
 	ON_BN_CLICKED(IDC_BUTTONDELETEIMAGE, OnButtondelete)
@@ -136,6 +137,46 @@ HCURSOR CDfuFileMgrDlg::OnQueryDragIcon()
 	return (HCURSOR) m_hIcon;
 }
 
+void CDfuFileMgrDlg::OnButtonadd() 
+{
+	CFile File;
+	CFileException ex;
+	CString Tmp;
+
+	UpdateData(TRUE);
+	Tmp.Format("Image for Alternate Setting %02i", m_AltSet);
+	if (m_ListFiles.FindString(-1, Tmp)!=LB_ERR)
+		AfxMessageBox("This alternate setting was already chosen");
+	else
+	{
+		TCHAR szFilters[]=
+		"hex Files (*.hex)|*.hex|s19 Files (*.s19)|*.s19|";
+
+		CFileDialog* dlg;
+		
+		dlg = new CFileDialog(TRUE, _T("hex"), _T("*.hex"), OFN_FILEMUSTEXIST, szFilters, this);
+
+		if (dlg->DoModal()==IDOK)
+		{
+			HANDLE Image;
+			if (STDFUFILES_ImageFromFile((LPSTR)(LPCSTR)dlg->GetPathName(), &Image, m_AltSet)==STDFUFILES_NOERROR)
+			{
+				m_Images.Add((DWORD)Image);
+				Tmp.Format("Image for Alternate Setting %02i", m_AltSet);
+				if (STDFUFILES_SetImageName(Image, (PSTR)(LPCSTR)m_TargetName)==STDFUFILES_NOERROR)
+				{
+					Tmp+="  (";
+					Tmp+=m_TargetName;
+					Tmp+=")";
+				}
+				m_ListFiles.AddString(Tmp);
+				m_ListFiles.SetCurSel(0);
+			}
+			else
+				AfxMessageBox("Unable to create image from this file...");
+		}
+	}
+}
 
 void CDfuFileMgrDlg::OnButtondelete() 
 {
@@ -166,6 +207,18 @@ void CDfuFileMgrDlg::OnButtongenerate()
     "Dfu Files (*.dfu)|*.dfu|All Files (*.*)|*.*||";
 	WORD Vid, Pid, Bcd;
 
+	char Path[MAX_PATH];
+	char Tmp[MAX_PATH];
+	char *pTmp;
+
+	GetModuleFileName(NULL, Path, MAX_PATH);
+	strrev(Path);
+	pTmp = strchr(Path, '\\');
+	strrev(pTmp);
+	lstrcpy(Tmp, pTmp);
+	lstrcpy(Path, Tmp);
+	lstrcat(Path, "*.dfu");
+
 	CFileDialog* dlg;
 	dlg = new CFileDialog(FALSE,  _T("dfu"), _T("*.dfu"),
 					OFN_CREATEPROMPT |OFN_PATHMUSTEXIST |OFN_OVERWRITEPROMPT,
@@ -190,13 +243,11 @@ void CDfuFileMgrDlg::OnButtongenerate()
 		Pid=(WORD)strtoul(m_Pid, &dummy, 16);
 		Bcd=(WORD)strtoul(m_Bcd, &dummy, 16);
 
-		//if (STDFUFILES_CreateNewDFUFile((LPSTR)(LPCSTR)dlg->GetFileName(), &hFile, Vid, Pid, Bcd)==STDFUFILES_NOERROR)
 		if (STDFUFILES_CreateNewDFUFile((LPSTR)(LPCSTR)dlg->GetPathName(), &hFile, Vid, Pid, Bcd) == STDFUFILES_NOERROR)
 		{
 			for (int i=0;i<m_Images.GetSize();i++)
 			{
 				CString Tmp, Tmp1;
-
 				HANDLE Image=(HANDLE)m_Images.GetAt(i);
 
 				m_ListFiles.GetText(i, Tmp1);
@@ -318,47 +369,8 @@ void CDfuFileMgrDlg::OnSelchangeListfiles()
 	m_Vid        = ;*/
 }
 
-
-void CDfuFileMgrDlg::OnButtonadds19hex()
+void CDfuFileMgrDlg::OnButtonadds19hex() 
 {
-	CFile File;
-	CFileException ex;
-	CString Tmp;
-
-	UpdateData(TRUE);
+	// TODO: Add your control notification handler code here
 	
-	Tmp.Format("Image for Alternate Setting %02i", m_AltSet);
-	
-	if (m_ListFiles.FindString(-1, Tmp) != LB_ERR)
-		AfxMessageBox("This alternate setting was already chosen");
-	else
-	{
-		TCHAR szFilters[] =
-			"hex Files (*.hex)|*.hex|s19 Files (*.s19)|*.s19|";
-
-		CFileDialog* dlg;
-
-		dlg = new CFileDialog(TRUE, _T("hex"), _T("*.hex"), OFN_FILEMUSTEXIST, szFilters, this);
-
-		if (dlg->DoModal() == IDOK)
-		{
-			HANDLE Image;
-			if (STDFUFILES_ImageFromFile((LPSTR)(LPCSTR)dlg->GetPathName(), &Image, m_AltSet) == STDFUFILES_NOERROR)
-			{
-
-				m_Images.Add((DWORD)Image);
-				Tmp.Format("Image for Alternate Setting %02i", m_AltSet);
-				if (STDFUFILES_SetImageName(Image, (PSTR)(LPCSTR)m_TargetName) == STDFUFILES_NOERROR)
-				{
-					Tmp += "  (";
-					Tmp += m_TargetName;
-					Tmp += ")";
-				}
-				m_ListFiles.AddString(Tmp);
-				m_ListFiles.SetCurSel(0);
-			}
-			else
-				AfxMessageBox("Unable to create image from this file...");
-		}
-	}
 }

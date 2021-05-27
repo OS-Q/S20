@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
 * Company            : STMicroelectronics
 * Author             : MCD Application Team
 * Description        : STMicroelectronics Device Firmware Upgrade Extension Demo
-* Version            : V3.0.2
-* Date               : 09-May-2011
+* Version            : V3.0.6
+* Date               : 01-June-2018
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,7 +13,7 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 ********************************************************************************
 * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE
-* "MCD-ST Liberty SW License Agreement V2.pdf"
+* "SLA0044.txt"
 *******************************************************************************/
 
 
@@ -100,11 +100,13 @@ CImage::CImage(BYTE bAlternate, PSTR pFilePath, BOOL bNamed, PSTR Name)
 	_splitpath(pFilePath,Drive,Dir,Fname,Ext);
 	ptr=strupr(Ext);
 	strcpy(Ext, ptr);
+
 	if (strcmp(Ext, ".S19")==0)
 		bRet=LoadS19(pFilePath);
 	else
 	if (strcmp(Ext, ".HEX")==0)
 		bRet=LoadHEX(pFilePath);
+
 	m_ImageState=bRet;
 	m_bNamed=bNamed;
 	if (bNamed)
@@ -460,20 +462,20 @@ BOOL CImage::LoadHEX(PSTR pFilePath)
 		unsigned long target_address,                 /* address of array index */
 					  base_address=0,
 					  extended_address=0,
-					  address,                        /* offset/address from hexfile */
-					  i,                              /* counterindex */
-					  checksum,                       /* checksum from hexfile */
-					  sum_var;                        /* to calculate checksum */
-		unsigned long byte_count,                     /* bytes per line in hexfile */
-					  separator,                      /* separator string in hexfile */
+					  address=0,                        /* offset/address from hexfile */
+					  i=0,                              /* counterindex */
+					  checksum=0,                       /* checksum from hexfile */
+					  sum_var=0;                        /* to calculate checksum */
+		unsigned long byte_count = 0,                     /* bytes per line in hexfile */
+			          separator,                      /* separator string in hexfile */
 			          last_byte,                      /* convertion end */
-			          character,                      /* date from hexfile */
-			          //colon;                          /* begin of line in hexfile */
-			          colon=0;							/*官方的代码没有初始化colon为0，导致在命令行中运行有时候转换失败*/
+			          character;                     /* date from hexfile */
+		unsigned char colon;                          /* begin of line in hexfile */
 		unsigned short lineno=1;
 		char message[100];		// error message
 
 		last_byte = FALSE;						  /* conversion begin */
+
 		do {
 			sum_var = 0;                          /* checksum calculation begin */
 			fscanf(fp,"%1c",&colon);
@@ -632,7 +634,6 @@ BOOL CImage::LoadHEX(PSTR pFilePath)
 				wsprintf(message, "FILE : line %i: Not in Intel Hex format!", lineno);
 				LDisplayError(message);
 				bRet=FALSE;
-				printf("FILE : line %i: Bad hexadecimal checksum!", colon);
 				break;
 			}
 		}

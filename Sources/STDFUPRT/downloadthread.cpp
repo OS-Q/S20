@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
 * Company            : STMicroelectronics
 * Author             : MCD Application Team
 * Description        : STMicroelectronics Device Firmware Upgrade Extension Demo
-* Version            : V3.0.2
-* Date               : 09-May-2011
+* Version            : V3.0.6
+* Date               : 01-June-2018
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,7 +13,7 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 ********************************************************************************
 * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE
-* "MCD-ST Liberty SW License Agreement V2.pdf"
+* "SLA0044.txt"
 *******************************************************************************/
 
 #include "stdafx.h"
@@ -41,7 +41,6 @@ BOOL CDownloadThread::RunThread()
 	BOOL NeedsToChangeElement;
 	DWORD dwPercentCalc;
 	// Download State Machine
-
 
 	m_PollTime=0;
 
@@ -149,7 +148,7 @@ BOOL CDownloadThread::RunThread()
 				else
 				{
 					if (Context.LastDFUStatus.bState==STATE_DFU_DOWNLOAD_BUSY)
-						m_PollTime=Context.LastDFUStatus.bwPollTimeout[0]+0x100*Context.LastDFUStatus.bwPollTimeout[1]+0x10000*Context.LastDFUStatus.bwPollTimeout[2];
+						m_PollTime=  Context.LastDFUStatus.bwPollTimeout[0]+0x100*Context.LastDFUStatus.bwPollTimeout[1]+0x10000*Context.LastDFUStatus.bwPollTimeout[2];
 
 					m_Retry=NB_TRIALS;
 				}
@@ -165,7 +164,6 @@ BOOL CDownloadThread::RunThread()
 			DFUIMAGEELEMENT Element;
 			CImage *pImage=(CImage*)Context.hImage;
 			DWORD i, NbEl=pImage->GetNbElements();
-			
 
 			if (Context.Operation==OPERATION_ERASE)
 				Context.Percent=((Context.CurrentImageElement+1)*99)/NbEl;
@@ -195,10 +193,7 @@ BOOL CDownloadThread::RunThread()
 						if (Context.Operation==OPERATION_ERASE)
 							bRet=EraseAndGetStatus(&Context);
 						else
-						{
-							bRet = SetAddressAndGetStatus(&Context);
-						}
-
+							bRet=SetAddressAndGetStatus(&Context);
 						if (bRet)
 							break;
 					}
@@ -208,29 +203,22 @@ BOOL CDownloadThread::RunThread()
 						break;
 					}
 				}
-				if ((bRet) && (!NeedsToChangeElement))
-				{
-					
-					bRet = DownloadAndGetStatus(&Context);
-				}
-				else if ( (!bRet) && (NeedsToChangeElement) )
+				if ( (bRet) && (!NeedsToChangeElement) )
+					bRet=DownloadAndGetStatus(&Context);
+				else
+				if ( (!bRet) && (NeedsToChangeElement) )
 				{
 					// Success !
 					EnsureIdleMode(&Context);
 					Context.Percent=100;
 					SetCurrentContext(&Context);
 					bRet=FALSE;
-					
-				Test(&Context);
 				}
 			}
 			else
 			{
-				if (Context.CurrentNBlock >= 2)
-				{
-					bRet = DownloadAndGetStatus(&Context);
-				}
-					
+				if (Context.CurrentNBlock>=2)
+					bRet=DownloadAndGetStatus(&Context);
 				else
 				{
 					if (Context.Operation==OPERATION_ERASE)

@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
 * Company            : STMicroelectronics
 * Author             : MCD Application Team
 * Description        : STMicroelectronics Device Firmware Upgrade  Extension Demo
-* Version            : V3.0.2
-* Date               : 09-May-2011
+* Version            : V3.0.6
+* Date               : 01-June-2018
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,7 +13,7 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 ********************************************************************************
 * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE
-* "MCD-ST Liberty SW License Agreement V2.pdf"
+* "SLA0044.txt"
 *******************************************************************************/
 
 
@@ -109,7 +109,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_OpenExistingDFUFile(PSTR pPathFile,
 															  PWORD pBcd,
 															  PBYTE pNbImages)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	DWORD dwRet;
 	CDFUFile *pDfuFile;
@@ -143,11 +143,11 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_CreateNewDFUFile(PSTR pPathFile,
 														 WORD Pid,
 														 WORD Bcd)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
 	DWORD dwRet;
 	CDFUFile *pDfuFile;
-
+	
 	pDfuFile=new CDFUFile(pPathFile, CFile::modeCreate | CFile::modeReadWrite, Vid, Pid, Bcd);
 
 	dwRet=pDfuFile->GetError();
@@ -165,7 +165,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_CreateNewDFUFile(PSTR pPathFile,
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_CloseDFUFile(HANDLE hFile)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUPRT_NOERROR;
@@ -188,7 +188,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_CloseDFUFile(HANDLE hFile)
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_AppendImageToDFUFile(HANDLE hFile, HANDLE Image)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUPRT_NOERROR;
@@ -214,7 +214,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_ReadImageFromDFUFile(HANDLE hFile,
 															 int Rank, 
 															 PHANDLE pImage)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUPRT_NOERROR;
@@ -241,7 +241,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_ReadImageFromDFUFile(HANDLE hFile,
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_CreateImage(PHANDLE pHandle, BYTE nAlternate)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	DWORD Ret=STDFUFILES_BADPARAMETER;
 
@@ -257,7 +257,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_CreateImage(PHANDLE pHandle, BYTE nAlt
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_CreateImageFromMapping(PHANDLE pHandle, PMAPPING pMapping)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	DWORD Ret=STDFUFILES_BADPARAMETER;
 
@@ -273,7 +273,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_CreateImageFromMapping(PHANDLE pHandle
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_DuplicateImage(HANDLE hSource, PHANDLE pDest)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
 	DWORD dwRet=STDFUFILES_NOERROR;
 	BOOL bFound=FALSE;
@@ -308,7 +308,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_DuplicateImage(HANDLE hSource, PHANDLE
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageNbElement(HANDLE Handle, PDWORD pNbElements)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -332,7 +332,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageNbElement(HANDLE Handle, PDWOR
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_SetImageElement(HANDLE Handle, DWORD dwRank, BOOL bInsert, DFUIMAGEELEMENT Element)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -355,7 +355,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_SetImageElement(HANDLE Handle, DWORD d
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageElement(HANDLE Handle, DWORD dwRank, PDFUIMAGEELEMENT pElement)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -378,7 +378,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageElement(HANDLE Handle, DWORD d
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_FilterImageForOperation(HANDLE Handle, PMAPPING pMapping, DWORD Operation, BOOL bTruncateLeadFFForUpgrade)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -404,7 +404,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_FilterImageForOperation(HANDLE Handle,
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_DestroyImageElement(HANDLE Handle, DWORD dwRank)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -427,7 +427,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_DestroyImageElement(HANDLE Handle, DWO
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_DestroyImage(PHANDLE pHandle)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -454,10 +454,11 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_DestroyImage(PHANDLE pHandle)
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_ImageFromFile(PSTR pPathFile, PHANDLE pImage, BYTE nAlternate)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+	
 	DWORD Ret=STDFUFILES_BADPARAMETER;
+
 	CImage *obImage=new CImage(nAlternate, pPathFile, FALSE, NULL);
-	//printf("%s\r\n", obImage);
 	if (obImage)
 	{
 		if (obImage->GetImageState())
@@ -467,8 +468,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_ImageFromFile(PSTR pPathFile, PHANDLE 
 			Ret=STDFUFILES_NOERROR;
 		}
 		else
-		{//has error
-
+		{
 			delete obImage;
 			Ret=STDFUFILES_BADFORMAT;
 		}
@@ -478,7 +478,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_ImageFromFile(PSTR pPathFile, PHANDLE 
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_ImageToFile(PSTR pPathFile, HANDLE Image)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -503,7 +503,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_ImageToFile(PSTR pPathFile, HANDLE Ima
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageAlternate(HANDLE Image, PBYTE pAlternate)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -527,7 +527,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageAlternate(HANDLE Image, PBYTE 
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageName(HANDLE Image, PSTR Name)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -553,7 +553,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageName(HANDLE Image, PSTR Name)
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_SetImageName(HANDLE Image, PSTR Name)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+	//AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	BOOL bFound=FALSE;
 	DWORD dwRet=STDFUFILES_NOERROR;
@@ -577,7 +577,7 @@ extern "C" DWORD PASCAL EXPORT STDFUFILES_SetImageName(HANDLE Image, PSTR Name)
 
 extern "C" DWORD PASCAL EXPORT STDFUFILES_GetImageSize(HANDLE Image)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
       DWORD dwRet=STDFUFILES_NOERROR;
 

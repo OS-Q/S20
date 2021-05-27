@@ -1,9 +1,9 @@
-/******************** (C) COPYRIGHT 2011 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2018 STMicroelectronics ********************
 * Company            : STMicroelectronics
 * Author             : MCD Application Team
 * Description        : STMicroelectronics Device Firmware Upgrade  Extension Demo
-* Version            : V3.0.3
-* Date               : 21-November-2011
+* Version            : V3.0.6
+* Date               : 01-June-2018
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -13,7 +13,7 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 ********************************************************************************
 * FOR MORE INFORMATION PLEASE CAREFULLY READ THE LICENSE AGREEMENT FILE
-* "MCD-ST Liberty SW License Agreement V2.pdf"
+* "SLA0044.txt"
 *******************************************************************************/
 
 // DfuSeDemoDlg.cpp : implementation file
@@ -48,8 +48,10 @@ static char THIS_FILE[] = __FILE__;
 #define COLOR_ERROR_FG		(RGB(0xFF,0x00,0x00))
 #define COLOR_ERROR_BG		(RGB_BK)
 
-static GUID	GUID_DFU = { 0x3fe809ab, 0xfb91, 0x4cb5, { 0xa6, 0x43, 0x69, 0x67, 0x0d, 0x52,0x36,0x6e } };
-static GUID GUID_APP = { 0xcb979912, 0x5029, 0x420a, { 0xae, 0xb1, 0x34, 0xfc, 0x0a, 0x7d,0x57,0x26 } };
+static GUID	GUID_DFU = { 0x3fe809ab, 0xfb91, 0x4cb5, { 0xa6, 0x43, 0x69, 0x67, 0x0d, 0x52, 0x36, 0x6e } };
+//static GUID GUID_APP = { 0xcb979912, 0x5029, 0x420a, { 0xae, 0xb1, 0x34, 0xfc, 0x0a, 0x7d,0x57,0x26 } };
+static GUID GUID_APP1 = { 0x4D1E55B2, 0xF16F, 0x11CF, { 0x88, 0xCB, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30} };//midifyied by havenxie
+static GUID GUID_APP = { 0x745a17a0, 0x74d3, 0x11d0, { 0xb6, 0xfe, 0x00, 0xa0, 0xc9, 0x0f, 0x57, 0xda} };
 
 /////////////////////////////////////////////////////////////////////////////
 // CDfuSeDemoDlg dialog
@@ -345,7 +347,7 @@ void CDfuSeDemoDlg::Refresh()
 	m_CtrlDevAppBcd.SetWindowText("");
 
 	// Begin with HID devices  // Commented in Version V3.0.3 and Keep it for customer usage if wanted.
-	/*ReleaseHIDMemory();
+	ReleaseHIDMemory();
 	m_Enum.FindHidDevice(&m_HidDevices,&m_HidDevice_Counter);
 	FindMyHIDDevice();
 	for(i=0;i<int(m_HidDevice_Counter);i++)
@@ -359,26 +361,26 @@ void CDfuSeDemoDlg::Refresh()
 				Prod += Product[j];
 		}
 		else 
-			Prod="(Unknown HID Device)";
+			Prod="(Other HID Device)";
 
 		String.Format("%s",Prod);
 		m_CtrlDFUDevices.AddString(String);
 		m_CtrlDevices.AddString(String);
 		Prod = "";
-	}*/  // Commented in Version V3.0.3 and Keep it for customer usage if wanted.
+	}  // Commented in Version V3.0.3 and Keep it for customer usage if wanted.
 
 
     // Continue with DFU devices. DFU devices will be listed after HID ones
-	for (i=0;i<2;i++)
+	for (i=0;i<1;i++)
 	{
 		GUID Guid;
 
 		if (i==0)
 			Guid=GUID_DFU;
-		else if (i==1)
-			Guid=GUID_APP;
-		//else
-		//    HidD_GetHidGuid(&Guid);	
+		//else if (i==1)
+		//	Guid=GUID_APP;
+		else
+		    HidD_GetHidGuid(&Guid);	
 
 		info=SetupDiGetClassDevs(&Guid, NULL, NULL, DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
 		if (info!=INVALID_HANDLE_VALUE)  
@@ -400,21 +402,27 @@ void CDfuSeDemoDlg::Refresh()
 				if (SetupDiGetDeviceInterfaceDetail(info, &ifData, detail, needed, NULL, &did))
 				{
 					// Add the link to the list of all DFU devices
-					CString Tmp;
-
-					Tmp=detail->DevicePath;
-					Tmp.MakeUpper();
-					m_CtrlDFUDevices.AddString(Tmp);
+					if (strstr(detail->DevicePath, "vid_0483") != NULL)//add by havenxie
+					{
+						CString Tmp;
+						Tmp = detail->DevicePath;
+						Tmp.MakeUpper();
+						m_CtrlDFUDevices.AddString(Tmp);
+					}
 				}
 				else
 					m_CtrlDFUDevices.AddString("");
 
-				if (SetupDiGetDeviceRegistryProperty(info, &did, SPDRP_DEVICEDESC, NULL, (PBYTE)Product, 253, NULL))
-					Prod= Product;
-				else
-					Prod="(Unnamed DFU device)";
-				// Add the name of the device
-				m_CtrlDevices.AddString(Prod);
+				if (strstr(detail->DevicePath, "vid_0483") != NULL)//add by havenxie
+				{
+					if (SetupDiGetDeviceRegistryProperty(info, &did, SPDRP_DEVICEDESC, NULL, (PBYTE)Product, 253, NULL))
+						Prod = Product;
+					else
+						//Prod = "(Unnamed DFU device)";
+						Prod = "(Unnamed DFU | HID device)";//modified by havenxie
+					// Add the name of the device
+					m_CtrlDevices.AddString(Prod);
+				}
 				delete[] (PBYTE)detail;
 			}
 			SetupDiDestroyDeviceInfoList(info);
@@ -531,7 +539,7 @@ void CDfuSeDemoDlg::OnSelchangeCombodevices()
 			m_CtrlDFUDevices.GetText(Sel, m_CurrDFUName);
 			//to be removed
 			//m_BtnEnterDFU.EnableWindow(TRUE);
-		
+
 			if (STDFU_Open((LPSTR)(LPCSTR)m_CurrDFUName,&hDle)==STDFU_NOERROR)
 			{
 				if (STDFU_GetDeviceDescriptor(&hDle, &m_DeviceDesc)==STDFU_NOERROR)
@@ -1227,7 +1235,7 @@ void CDfuSeDemoDlg::OnButtonenterdfu()
 						HandleTxtError("Unable to enter DFU mode: Set Feature HID Detach failed !");
 					else
 					{
-						Sleep(1000);
+						Sleep(5000);
 						HandleTxtSuccess("Successfully entered DFU Mode !");
 						AfxMessageBox("Detach command successful ! Device list refresh will be done...\n\nPlease re-select your device in DFU mode");
 						Refresh();
@@ -1769,43 +1777,43 @@ void CDfuSeDemoDlg::OnButtonupgrade()
 {
 	if(ReadProtected)
 	{
-		    if (AfxMessageBox("Your device is read protected.\nWould you remove the read protection?", MB_YESNO |MB_ICONQUESTION)==IDYES)
+		if (AfxMessageBox("Your device is read protected.\nWould you remove the read protection?", MB_YESNO |MB_ICONQUESTION)==IDYES)
+		{
+			HANDLE hdl;
+			if (STDFU_Open((LPSTR)(LPCSTR)m_CurrDFUName,&hdl)==STDFU_NOERROR)
 			{
-				HANDLE hdl;
-                if (STDFU_Open((LPSTR)(LPCSTR)m_CurrDFUName,&hdl)==STDFU_NOERROR)
+				if (STDFU_SelectCurrentConfiguration(&hdl, 0, 0,1)==STDFU_NOERROR)
 				{
-				   if (STDFU_SelectCurrentConfiguration(&hdl, 0, 0,1)==STDFU_NOERROR)
-				   {
-					   DFUSTATUS DFUStatus;
+					DFUSTATUS DFUStatus;
 
-					   STDFU_Getstatus(&hdl, &DFUStatus);
-					   while(DFUStatus.bState != STATE_DFU_IDLE)
-					   {
-							STDFU_Clrstatus(&hdl);
-							STDFU_Getstatus(&hdl, &DFUStatus);
-					   }
+					STDFU_Getstatus(&hdl, &DFUStatus);
+					while(DFUStatus.bState != STATE_DFU_IDLE)
+					{
+						STDFU_Clrstatus(&hdl);
+						STDFU_Getstatus(&hdl, &DFUStatus);
+					}
 						 
-					   LPBYTE m_pBuffer = (LPBYTE)malloc(0x10);
-					   memset(m_pBuffer, 0xFF, 0x10);
-					   m_pBuffer[0] = 0x92;
+					LPBYTE m_pBuffer = (LPBYTE)malloc(0x10);
+					memset(m_pBuffer, 0xFF, 0x10);
+					m_pBuffer[0] = 0x92;
 					 
 
-					   STDFU_Dnload(&hdl, m_pBuffer, 0x01, 0); 
+					STDFU_Dnload(&hdl, m_pBuffer, 0x01, 0); 
 
-					   STDFU_Getstatus(&hdl, &DFUStatus);
-					   /*while(DFUStatus.bState != STATE_DFU_IDLE)
-					   {
-							STDFU_Clrstatus(&hdl);
-							STDFU_Getstatus(&hdl, &DFUStatus);
-					   }*/
-				   }
-				   STDFU_Close(&hdl);
-				   ReadProtected = FALSE;
+					STDFU_Getstatus(&hdl, &DFUStatus);
+					/*while(DFUStatus.bState != STATE_DFU_IDLE)
+					{
+						STDFU_Clrstatus(&hdl);
+						STDFU_Getstatus(&hdl, &DFUStatus);
+					}*/
 				}
-
+				STDFU_Close(&hdl);
+				ReadProtected = FALSE;
 			}
-			else 
-				return;
+
+		}
+		else 
+			return;
 	}
 
 
@@ -1929,8 +1937,6 @@ void CDfuSeDemoDlg::LaunchUpgrade()
 		}
 		else
 		{
-			//DFUThreadContext Context;
-			//Test(&Context);
 			m_Progress.SetPos(0);
 			m_Progress.SetWindowText("");
 			m_Progress.SetShowText(TRUE);
@@ -2192,7 +2198,7 @@ void CDfuSeDemoDlg::OnTimer(UINT_PTR nIDEvent)
 													if (ElementSource.Data[j]!=ElementRead.Data[j])
 													{
 														bDifferent=TRUE;
-														HandleTxtError("Verify successful, but data not matching...");
+														HandleTxtError("Reading successful, but data not matching...");   /* Verify changed to Reading  in V3.0.6 */
 														Tmp.Format("Matching not good. First Difference at address 0x%08X:\nFile  byte  is  0x%02X.\nRead byte is 0x%02X.", ElementSource.dwAddress+j, ElementSource.Data[j], ElementRead.Data[j]);
 														AfxMessageBox(Tmp);
 														break;
@@ -2795,15 +2801,15 @@ BOOL CDfuSeDemoDlg::OnDeviceChange(UINT nEventType,DWORD_PTR dwData)
 	}
 	if ((nEventType == DBT_DEVICEARRIVAL))
 	{
-		hdr=(_DEV_BROADCAST_HEADER*)dwData;
-		if (hdr->dbcd_devicetype==DBT_DEVTYP_DEVICEINTERFACE)
+		hdr = (_DEV_BROADCAST_HEADER*)dwData;
+		if (hdr->dbcd_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
+		{
 			Refresh();
+		}
 	}
 	//Refresh();
 	return TRUE;
 }
-
-
 
 void CDfuSeDemoDlg::OnDblclkListtargets(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -2844,7 +2850,7 @@ void CDfuSeDemoDlg::OnDblclkListtargets(NMHDR* pNMHDR, LRESULT* pResult)
 					  // }
 				   }
 				   STDFU_Close(&hdl);
-				   _sleep(1000);
+				   _sleep(20000);
 				   ReadProtected = FALSE;
 				}
 

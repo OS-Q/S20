@@ -65,8 +65,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,4,0
- PRODUCTVERSION 3,0,4,0
+ FILEVERSION 3,0,6,0
+ PRODUCTVERSION 3,0,6,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -83,12 +83,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "STMicroelectronics"
             VALUE "FileDescription", "STDFUPRT DLL"
-            VALUE "FileVersion", "3, 0, 4, 0"
+            VALUE "FileVersion", "3, 0, 6, 0"
             VALUE "InternalName", "STDFUPRT"
-            VALUE "LegalCopyright", "Copyright © 2014"
+            VALUE "LegalCopyright", "Copyright © 2018"
             VALUE "OriginalFilename", "STDFUPRT.DLL"
             VALUE "ProductName", "Dynamic Link Library STDFUPRT"
-            VALUE "ProductVersion", "3, 0, 4, 0"
+            VALUE "ProductVersion", "3, 0, 6, 0"
         END
     END
     BLOCK "VarFileInfo"
